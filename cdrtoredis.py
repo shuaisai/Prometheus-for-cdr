@@ -9,9 +9,8 @@ def WtcCount(filename):
     wtccount = {'total': 0,
                 'answer': 0}
 
-    with open(filename, 'r') as fp:
-
-        try:
+    try:
+        with open(filename, 'r') as fp:
 
             for line in fp:
                 cdrlist = line.split(',')
@@ -21,8 +20,8 @@ def WtcCount(filename):
 
                 if int(during) > 0:
                     wtccount['answer'] += 1
-        except:
-            pass
+    except:
+        pass
 
     return wtccount
 
@@ -33,14 +32,18 @@ if __name__ == '__main__':
     while True:
 
         day = datetime.datetime.now().strftime("%d")
-
+        if list(day)[0] == '0':
+            day = list(day)[1]
         dir = f"/uloc/wtc/XDR/backup/CDR/{day}"
         try:
             file = os.popen("ls -t %s|head -n1|awk '{print $0}'" % dir).read()
-            filename = dir + '/' + file
-            filename = filename.strip()
+            if file:
+                filename = dir + '/' + file
+                filename = filename.strip()
+            else:
+                filename = Nfilename
         except:
-            filename = Nfilename
+            pass
 
         if filename != Nfilename:
             Nfilename = filename
